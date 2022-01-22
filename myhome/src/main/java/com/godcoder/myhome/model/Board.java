@@ -14,8 +14,10 @@ public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @NotNull
-    @Size(min=2,max=30)
+    @Size(min=2, max=30)
     private String title;
+
     private String content;
 }

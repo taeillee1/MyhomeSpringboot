@@ -47,7 +47,13 @@ public class BoardController {
     public String formSubmit(@Valid Board board, BindingResult bindingResult){//@ModelAttribute 이것은 사용자가 요청시 전달하는 값을 오브젝트 형태로 매핑해주는것을 의미한다
 
         boardValidator.validate(board, bindingResult);
-        boardRepository.save(board); //Get매핑으로 board라는 키값으로 저장된 값을 데이터베이스 테이블에 저장하는것
-        return "redirect:/board/list";
+        if(bindingResult.hasErrors()){
+            return "board/form";
+        }
+        else{
+            boardRepository.save(board); //Get매핑으로 board라는 키값으로 저장된 값을 데이터베이스 테이블에 저장하는것
+            return "redirect:/board/list";
+        }
+
     }
 }
