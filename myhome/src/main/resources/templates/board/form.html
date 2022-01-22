@@ -17,7 +17,7 @@
 <div class="container">
     <h2>게시판</h2>
     <form action="#" th:action="@{/board/form}" th:object="${board}" method="post">
-        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{id}"> <!-- 이걸안쓰면 수정이 안되고 계속해서 새로운곳에다가 생성시킴 -->
         <div class="form-group">
             <label for="title">제목</label>
             <input type="text" class="form-control" id="title" th:field="*{title}">
