@@ -7,11 +7,13 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link href="starter-template.css" th:href="@{/css/starter-template.css}" rel="stylesheet">
-    <title>Hello, world!</title>
+    <link href="/css/starter-template.css" rel="stylesheet">
+    <link th:href="@{/css/signing.css}" rel="stylesheet">
+
+    <title>Login</title>
 </head>
-<body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')">
+<body class="text-center">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
     <!--  <a class="navbar-brand" href="#">Spring boot Tutorial</a>-->
     <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">-->
     <!--    <span class="navbar-toggler-icon"></span>-->
@@ -43,52 +45,30 @@
     <!--&lt;!&ndash;    </form>&ndash;&gt;-->
     <!--  </div>-->
 </nav>
-
 <div class="container">
-    <h2>게시판</h2>
-    <div>총 건수 : <span th:text="${boards.totalElements}"></span></div><!-- 컨트롤러에서 get으로 받아온 개수를 뿌려주기 -->
-    <form class="form-inline d-flex justify-content-end" method="get" th:action="@{/board/list}">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="searchText" class="sr-only">검색</label>
-            <input type="text" class="form-control" id="searchText" name="searchText" th:value="${param.searchText}">
+    <form class="form-signing" th:action="@{/account/register}" method="post">
+        <img class="mb-4" src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">회원가입</h1>
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            Invalid username and password
         </div>
-        <button type="submit" class="btn btn-secondary mb-2">검색</button>
+        <div th:if="${param.logout}" class="alert alert-danger" role="alert">
+            You have been logged out.
+        </div>
+        <label for="username" class="sr-only">Username</label>
+        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+        <!--        <div class="checkbox mb-3">-->
+        <!--            <label>-->
+        <!--                <input type="checkbox" value="remember-me"> Remember me-->
+        <!--            </label>-->
+        <!--        </div>-->
+        <button class="btn btn-lg btn-primary btn-block" type="submit">회원가입</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
     </form>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">번호</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-        </tr>
-        </thead>
-        <tbody>
-<!--        리스트를 for형식으로 돌리는 문법-->
-        <tr th:each = "board : ${boards}">
-<!--            위의 tr 에서 board : 이렇게 선언했으므로 여기서는 board.id로 사용-->
-            <td th:text="${board.id}">Larry</td>
-            <td><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}"></a></td>
-            <td>홍길동</td>
-        </tr>
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${1 == boards.pageable.pageNumber + 1} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber - 1},searchText=${param.searchText})}" tabindex="-1" aria-disabled="true">Previous</a>
-            </li>
-            <li class="page-item" th:classappend="${i == boards.pageable.pageNumber + 1} ? 'active'" th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                <a class="page-link" href="#" th:href="@{/board/list(page=${i-1},searchText=${param.searchText})}" th:text="${i}">1</a></li>
-            <li class="page-item" th:classappend="${boards.totalPages == boards.pageable.pageNumber + 1} ? 'disabled'">
-                <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber + 1} ,searchText=${param.searchText})}">Next</a>
-            </li>
-        </ul>
-    </nav>
-    <div class="text-right">
-        <a type="button" class="btn btn-primary" th:href="@{/board/form}">쓰기</a>
-    </div>
-
 </div>
+
 
 <!-- Optional JavaScript; choose one of the two! -->
 
