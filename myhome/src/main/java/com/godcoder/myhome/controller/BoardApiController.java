@@ -55,8 +55,9 @@ class BoardApiController {
                 });
     }
 
-    @DeleteMapping("/Boards/{id}")
+    @DeleteMapping("/boards/{id}")
     void deleteBoard(@PathVariable Long id) {
+
         repository.deleteById(id);
     }
 }

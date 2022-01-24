@@ -94,7 +94,7 @@ public class BoardController {
 
         boardValidator.validate(board, bindingResult);
         if(bindingResult.hasErrors()){
-            return "board/form";
+            return "board/modify";
         }
         else{
             String username = authentication.getName();
