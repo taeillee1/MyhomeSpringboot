@@ -68,7 +68,7 @@
 <!--            위의 tr 에서 board : 이렇게 선언했으므로 여기서는 board.id로 사용-->
             <td th:text="${board.id}">Larry</td>
             <td><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}"></a></td>
-            <td>홍길동</td>
+            <td th:text="${board.user.username}">홍길동</td>
         </tr>
         </tbody>
     </table>

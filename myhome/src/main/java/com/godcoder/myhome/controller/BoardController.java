@@ -2,12 +2,14 @@ package com.godcoder.myhome.controller;
 
 import com.godcoder.myhome.model.Board;
 import com.godcoder.myhome.repository.BoardRepository;
+import com.godcoder.myhome.service.BoardService;
 import com.godcoder.myhome.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,9 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     private BoardValidator boardValidator;
@@ -60,14 +65,16 @@ public class BoardController {
     }
 
     @PostMapping("/form")//글을 쓰고 확인버튼을 눌렀을때 발동
-    public String formSubmit(@Valid Board board, BindingResult bindingResult){//@ModelAttribute 이것은 사용자가 요청시 전달하는 값을 오브젝트 형태로 매핑해주는것을 의미한다
+    public String formSubmit(@Valid Board board, BindingResult bindingResult, Authentication authentication){//@ModelAttribute 이것은 사용자가 요청시 전달하는 값을 오브젝트 형태로 매핑해주는것을 의미한다
 
         boardValidator.validate(board, bindingResult);
         if(bindingResult.hasErrors()){
             return "board/form";
         }
         else{
-            boardRepository.save(board); //Get매핑으로 board라는 키값으로 저장된 값을 데이터베이스 테이블에 저장하는것
+            String username = authentication.getName();
+            boardService.save(username, board);
+           // boardRepository.save(board); //Get매핑으로 board라는 키값으로 저장된 값을 데이터베이스 테이블에 저장하는것
             return "redirect:/board/list";
         }
 
