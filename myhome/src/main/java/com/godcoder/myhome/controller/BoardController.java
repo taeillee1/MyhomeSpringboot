@@ -6,7 +6,6 @@ import com.godcoder.myhome.service.BoardService;
 import com.godcoder.myhome.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
@@ -32,7 +31,7 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 2) Pageable pageable,
+    public String list(Model model, @PageableDefault(size = 4) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText){ //PageableDefault를 설정하지않으면 10개가 기본
         //List<Board> boards = boardRepository.findAll(); 이건 리스트로 다받는 것
         //Page<Board> boards = boardRepository.findAll(pageable);
@@ -50,18 +49,44 @@ public class BoardController {
         return "board/list";
     }
 
-    @GetMapping("/form") //리스트페이지에서 쓰기버튼을 눌렀을 때 불려옴
-    public String form(Model model, @RequestParam(required = false) Long id){
+    @GetMapping("/form") //리스트페이지에서 제목링크를 클릭하면 들어옴
+    public String form(Model model, @RequestParam(required = true) Long id, String username){
 
-        if(id==null){
-            model.addAttribute("board",new Board());//새로운 데이터 베이스 칸을 만들어 전송하고
-        }
-        else{
             Board board = boardRepository.findById(id).orElse(null);
             model.addAttribute("board",board);
-        }
 
         return "board/form";
+    }
+
+    @GetMapping("/modify") //리스트페이지에서 제목링크를 클릭하면 들어옴
+    public String modify(Model model, @RequestParam(required = true) Long id, String username){
+
+        Board board = boardRepository.findById(id).orElse(null);
+        model.addAttribute("board",board);
+
+        return "board/modify";
+    }
+    @GetMapping("/forms") //리스트페이지에서 쓰기버튼을 눌렀을 때 불려옴
+    public String forms(Model model){
+
+            model.addAttribute("board",new Board());//새로운 데이터 베이스 칸을 만들어 전송하고
+
+        return "board/forms";
+    }
+    @PostMapping("/forms")//글을 쓰고 확인버튼을 눌렀을때 발동
+    public String formsSubmit(@Valid Board board, BindingResult bindingResult, Authentication authentication){//@ModelAttribute 이것은 사용자가 요청시 전달하는 값을 오브젝트 형태로 매핑해주는것을 의미한다
+
+        boardValidator.validate(board, bindingResult);
+        if(bindingResult.hasErrors()){
+            return "board/forms";
+        }
+        else{
+            String username = authentication.getName();
+            boardService.save(username, board);
+            // boardRepository.save(board); //Get매핑으로 board라는 키값으로 저장된 값을 데이터베이스 테이블에 저장하는것
+            return "redirect:/board/list";
+        }
+
     }
 
     @PostMapping("/form")//글을 쓰고 확인버튼을 눌렀을때 발동
