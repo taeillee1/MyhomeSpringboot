@@ -41,7 +41,7 @@
             <div th:if="${#authorization.expr('isAuthenticated()')}">
                 <div th:if="${#authentication.name} == *{user.username}">
                     <a type="button" class="btn btn-primary" th:href="@{/board/modify(id=${board.id}, username=${board.user.username})}">수정</a>
-                    <button type="button" class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">삭제</button>
+                    <a type="button" class="btn btn-primary" th:href="@{/board/delete(id=${board.id})}">삭제</a>
                     <a type="button" class="btn btn-primary" th:href="@{/board/list}">취소</a>
                 </div>
                 <div th:unless="${#authentication.name} == *{user.username}">

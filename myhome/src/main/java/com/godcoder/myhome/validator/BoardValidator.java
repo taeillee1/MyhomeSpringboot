@@ -21,7 +21,7 @@ public class BoardValidator implements Validator {
         if(StringUtils.isEmpty(b.getTitle())){
             e.rejectValue("title", "key", "내용을 입력하세요.");
         } else{
-            if(b.getTitle().length()<3){
+            if(b.getTitle().length()<2){
                 e.rejectValue("title", "key", "2글자 이상으로 작성해주세요");
             }
         }
