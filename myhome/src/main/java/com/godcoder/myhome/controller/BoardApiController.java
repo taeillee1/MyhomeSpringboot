@@ -25,14 +25,12 @@ class BoardApiController {
         }
 
     }
-    // end::get-aggregate-root[]
 
     @PostMapping("/boards")
     Board newBoard(@RequestBody Board newBoard) {
         return repository.save(newBoard);
     }
 
-    // Single item
 
     @GetMapping("/boards/{id}")
     Board one(@PathVariable Long id) {
